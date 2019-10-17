@@ -90,6 +90,17 @@ class Home extends React.Component {
         });
     }
 
+    // convertDateInfo = (date) => {
+    //     let newFormat = Intl.DateTimeFormat('en-GB', { 
+    //                     year: 'numeric', 
+    //                     month: 'long', 
+    //                     day: '2-digit' 
+    //                 }).format(date);
+    //     this.setState({
+    //         date1: newFormat,
+    //     })
+    // }
+
     render() {
         return (
             <div className="homepage">
@@ -103,7 +114,11 @@ class Home extends React.Component {
                 <br/>
                 <br/>
                 <div>The forecast is: </div>
-                <div>For {this.state.date1}: a low temperature of {this.convertToFarenheit(this.state.lowTemp1)} degrees Farenheit and a high temperature of {this.convertToFarenheit(this.state.highTemp1)} with conditions of: {this.state.condition1}</div>
+                <div>For {
+                    // this.convertDateInfo(
+                    this.state.date1
+                    // )
+                    }: a low temperature of {this.convertToFarenheit(this.state.lowTemp1)} degrees Farenheit and a high temperature of {this.convertToFarenheit(this.state.highTemp1)} with conditions of: {this.state.condition1}</div>
                 <div>For {this.state.date2}: a low temperature of {this.convertToFarenheit(this.state.lowTemp2)} degrees Farenheit and a high temperature of {this.convertToFarenheit(this.state.highTemp2)} with conditions of: {this.state.condition2}</div>
                 <div>For {this.state.date3}: a low temperature of {this.convertToFarenheit(this.state.lowTemp3)} degrees Farenheit and a high temperature of {this.convertToFarenheit(this.state.highTemp3)} with conditions of: {this.state.condition3}</div>
             </div>
