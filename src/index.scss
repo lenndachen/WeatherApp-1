@@ -28,8 +28,8 @@
 
 .current {
     display: grid;
-    grid-template-areas: "map currentInfo";
-    grid-template-columns: 35% 65%;
+    grid-template-areas: "map . currentInfo";
+    grid-template-columns: 35% 10% 55%;
     padding: 20px;
 }
 
@@ -40,6 +40,10 @@
 .currentInfo {
     grid-area: currentInfo;
     text-align: left;
+}
+
+.weatherIcon {
+    width: 10%;
 }
 
 .forecast {
