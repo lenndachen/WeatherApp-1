@@ -8,6 +8,7 @@ class Home extends React.Component {
             location: "",
             temp: 0,
             condition: "",
+            // map: "",
             userEnteredZip: "",
             date1: "",
             lowTemp1: 0,
@@ -25,13 +26,12 @@ class Home extends React.Component {
     }
 
     componentDidMount() {
-        
     }
 
     getWeather() {
         const apikey = process.env.REACT_APP_API_WEATHER_KEY;
         let zipCode = this.state.userEnteredZip;
-        const apiUrl = "http://api.openweathermap.org/data/2.5/weather?" + "zip=" + zipCode + ",us" + "&APPID=" + apikey;
+        const apiUrl = "http://api.openweathermap.org/data/2.5/weather?zip=" + zipCode + ",us&APPID=" + apikey;
         fetch( apiUrl )
         .then(response => response.json())
         .then(responseData => {
@@ -60,15 +60,15 @@ class Home extends React.Component {
     }
 
     submit = () => {
-        console.log("you clicked submit");
         this.getWeather();
         this.getForecast();
+        this.getMap();
     }
 
     getForecast() {
         const apikey = process.env.REACT_APP_API_WEATHER_KEY;
         let zipCode = this.state.userEnteredZip;
-        const apiUrl = "http://api.openweathermap.org/data/2.5/forecast?zip=" + zipCode + ",us" + "&APPID=" + apikey;
+        const apiUrl = "http://api.openweathermap.org/data/2.5/forecast?zip=" + zipCode + ",us&APPID=" + apikey;
         fetch( apiUrl )
         .then(response => response.json())
         .then(responseData => {
@@ -90,37 +90,56 @@ class Home extends React.Component {
         });
     }
 
-    // convertDateInfo = (date) => {
-    //     let newFormat = Intl.DateTimeFormat('en-GB', { 
-    //                     year: 'numeric', 
-    //                     month: 'long', 
-    //                     day: '2-digit' 
-    //                 }).format(date);
-    //     this.setState({
-    //         date1: newFormat,
-    //     })
-    // }
+    getMap() {
+        const googleMapKey = process.env.REACT_APP_API_GOOGLE_MAP_KEY
+        let zipCode = this.state.userEnteredZip
+        let apiUrl = "https://maps.googleapis.com/maps/api/staticmap?center=" + zipCode + "&zoom=14&size=400x400&key=" + googleMapKey
+        // fetch(apiUrl)
+        // .then(response => {
+            
+        //     response.JSON.parse();
+        //     console.log("My map: ", response);
+        // });
+        // .then(responseData => responseData.text())
+        // .then(text => {
+        //     console.log('My Map Data', text);
+        //     this.setState({
+        //         map: responseData,
+        //     });
+        // });
+        this.setState({
+            map: apiUrl,
+        })
+        
+    }
 
     render() {
         return (
             <div className="homepage">
                 <h1>Weather App</h1>
-                <input onChange={this.handleUserEnteredZip} value={this.state.userEnteredZip} placeholder="Enter a zip code"></input> <button type="submit" onClick={() => this.submit()}>Submit</button>
-                <br/>
-                <br/>
-                <div>Today's weather for {this.state.location}: </div>
-                <div> It is currently {this.convertToFarenheit(this.state.temp)} degrees Farenheit.</div>
-                <div> The conditions are: {this.state.condition}.</div>
-                <br/>
-                <br/>
-                <div>The forecast is: </div>
-                <div>For {
-                    // this.convertDateInfo(
-                    this.state.date1
-                    // )
-                    }: a low temperature of {this.convertToFarenheit(this.state.lowTemp1)} degrees Farenheit and a high temperature of {this.convertToFarenheit(this.state.highTemp1)} with conditions of: {this.state.condition1}</div>
-                <div>For {this.state.date2}: a low temperature of {this.convertToFarenheit(this.state.lowTemp2)} degrees Farenheit and a high temperature of {this.convertToFarenheit(this.state.highTemp2)} with conditions of: {this.state.condition2}</div>
-                <div>For {this.state.date3}: a low temperature of {this.convertToFarenheit(this.state.lowTemp3)} degrees Farenheit and a high temperature of {this.convertToFarenheit(this.state.highTemp3)} with conditions of: {this.state.condition3}</div>
+                <div className="search">
+                    <input onChange={this.handleUserEnteredZip} value={this.state.userEnteredZip} placeholder="Enter a zip code"></input> 
+                    <button type="submit" onClick={() => this.submit()}>Submit</button>
+                </div>
+                
+                <div className="current">
+                    <div className="map">
+                        <img src={this.state.map} alt="map of weather area"></img>
+                    </div>
+                    
+                    <div className="currentInfo">
+                    <div>Today's weather for {this.state.location}: </div>
+                    <div> It is currently {this.convertToFarenheit(this.state.temp)} degrees Farenheit.</div>
+                    <div> The conditions are: {this.state.condition}.</div>
+                    </div>
+                </div>
+                
+                <div className="forecast">
+                    <h2 className="foreHeader">The weekly forecast is: </h2>
+                    <div className="foreDay1">For {this.state.date1}: a low temperature of {this.convertToFarenheit(this.state.lowTemp1)} degrees Farenheit and a high temperature of {this.convertToFarenheit(this.state.highTemp1)} with conditions of: {this.state.condition1}</div>
+                    <div className="foreDay2">For {this.state.date2}: a low temperature of {this.convertToFarenheit(this.state.lowTemp2)} degrees Farenheit and a high temperature of {this.convertToFarenheit(this.state.highTemp2)} with conditions of: {this.state.condition2}</div>
+                    <div className="foreDay3">For {this.state.date3}: a low temperature of {this.convertToFarenheit(this.state.lowTemp3)} degrees Farenheit and a high temperature of {this.convertToFarenheit(this.state.highTemp3)} with conditions of: {this.state.condition3}</div>
+                </div>
             </div>
         )
     }

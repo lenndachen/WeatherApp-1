@@ -11,3 +11,55 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.search {
+  padding: 10px;
+}
+
+.current {
+  display: grid;
+  grid-template-areas: "map currentInfo";
+  grid-template-columns: 35% 65%;
+  padding: 20px;
+}
+
+.map {
+  grid-area: map;
+}
+
+.currentInfo {
+  grid-area: currentInfo;
+  text-align: left;
+}
+
+.forecast {
+  display: grid;
+  grid-template-areas: 
+    "foreHeader foreHeader foreHeader"
+    "fore1 fore2 fore3";
+  grid-template-columns: 30% 30% 30%;
+  grid-gap: 2.5%;
+  padding: 20px;
+}
+
+.foreHeader {
+  grid-area: foreHeader;
+}
+
+.foreDay1 {
+  grid-area: fore1;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.foreDay2 {
+  grid-area: fore2;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.foreDay3 {
+  grid-area: fore3;
+  border: 1px solid black;
+  padding: 10px;
+}
