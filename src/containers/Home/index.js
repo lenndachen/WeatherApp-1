@@ -1,15 +1,17 @@
 import React from "react";
+// import SearchAndSave from "../../components/SearchAndSave";
+// import Current from "../../components/Current";
+// import Forecast from "../../components/Forecast";
 
 class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             loading: false,
+            userEnteredZip: "",
             location: "",
             temp: 0,
             condition: "",
-            // map: "",
-            userEnteredZip: "",
             date1: "",
             lowTemp1: 0,
             highTemp1: 0,
@@ -33,7 +35,18 @@ class Home extends React.Component {
         };
     }
 
-    componentDidMount() {
+    handleUserEnteredZip = (e) => {
+        let userInput = e.target.value;
+        console.log("in state: ", this.state.userEnteredZip);
+        this.setState({
+            userEnteredZip: userInput,
+        })
+    }
+
+    submit = () => {
+        this.getWeather();
+        this.getForecast();
+        this.getMap();
     }
 
     getWeather() {
@@ -52,32 +65,27 @@ class Home extends React.Component {
         });
     }
 
-    convertToFarenheit() {
-       let kelvin = this.state.temp - 273.15;
-       let farenheit = kelvin * 9/5 + 32;
-       let rounded = Math.round( farenheit * 10 ) / 10
-       return rounded;
-    }
-
-    handleUserEnteredZip = (e) => {
-        let userInput = e.target.value;
-        console.log("in state: ", this.state.userEnteredZip);
+    getMap() {
+        const googleMapKey = process.env.REACT_APP_API_GOOGLE_MAP_KEY
+        let zipCode = this.state.userEnteredZip
+        let apiUrl = "https://maps.googleapis.com/maps/api/staticmap?center=" + zipCode + "&zoom=11&size=350x350&key=" + googleMapKey
         this.setState({
-            userEnteredZip: userInput,
+            map: apiUrl,
         })
+        
     }
 
-    submit = () => {
-        this.getWeather();
-        this.getForecast();
-        this.getMap();
-    }
+    convertToFarenheit() {
+        let kelvin = this.state.temp - 273.15;
+        let farenheit = kelvin * 9/5 + 32;
+        let rounded = Math.round( farenheit * 10 ) / 10
+        return rounded;
+     }
 
-    getForecast() {
+     getForecast() {
         const apikey = process.env.REACT_APP_API_WEATHER_KEY;
         let zipCode = this.state.userEnteredZip;
         const apiUrl = "http://api.openweathermap.org/data/2.5/forecast?zip=" + zipCode + ",us&APPID=" + apikey;
-        // const apiUrl = "http://api.openweathermap.org/data/2.5/forecast/daily?zip=" + zipCode + ",us&APPID=" + apikey;
         fetch( apiUrl )
         .then(response => response.json())
         .then(responseData => {
@@ -107,50 +115,52 @@ class Home extends React.Component {
         });
     }
 
-    getMap() {
-        const googleMapKey = process.env.REACT_APP_API_GOOGLE_MAP_KEY
-        let zipCode = this.state.userEnteredZip
-        let apiUrl = "https://maps.googleapis.com/maps/api/staticmap?center=" + zipCode + "&zoom=14&size=400x400&key=" + googleMapKey
-        // fetch(apiUrl)
-        // .then(response => {
-            
-        //     response.JSON.parse();
-        //     console.log("My map: ", response);
-        // });
-        // .then(responseData => responseData.text())
-        // .then(text => {
-        //     console.log('My Map Data', text);
-        //     this.setState({
-        //         map: responseData,
-        //     });
-        // });
-        this.setState({
-            map: apiUrl,
-        })
-        
-    }
+    convertToFarenheit() {
+        let kelvin = this.state.temp - 273.15;
+        let farenheit = kelvin * 9/5 + 32;
+        let rounded = Math.round( farenheit * 10 ) / 10
+        return rounded;
+     }
 
     render() {
+        
         return (
             <div className="homepage">
                 <h1>Weather App</h1>
-                <div className="search">
-                    <input onChange={this.handleUserEnteredZip} value={this.state.userEnteredZip} placeholder="Enter a zip code"></input> 
-                    <button type="submit" onClick={() => this.submit()}>Submit</button>
+                {/* <SearchAndSave /> */}
+                {/* <Current /> */}
+                {/* <Forecast /> */}
+
+                <div className="searchAndSaved">
+                    <div className="search">
+                        <input 
+                            onChange={this.handleUserEnteredZip} 
+                            // value={enteredZipCode} 
+                            placeholder="Enter a zip code">
+                        </input> 
+                        <button 
+                            type="submit" 
+                            onClick={() => this.submit()}>
+                                Submit
+                        </button>
+                    </div>
+                    <div className="saved">
+                        <p>Local Saved List will go here</p>
+                    </div>
                 </div>
-                
+
                 <div className="current">
                     <div className="map">
                         <img src={this.state.map} alt="map of weather area"></img>
                     </div>
                     
                     <div className="currentInfo">
-                    <div>Today's weather for {this.state.location}: </div>
-                    <div> It is currently {this.convertToFarenheit(this.state.temp)} degrees Farenheit.</div>
-                    <div> The conditions are: {this.state.condition}.</div>
+                        <div>Today's weather for {this.state.location}: </div>
+                        <div> It is currently {this.convertToFarenheit(this.state.temp)} degrees Farenheit.</div>
+                        <div> The conditions are: {this.state.condition}.</div>
                     </div>
                 </div>
-                
+
                 <div className="forecast">
                     <h2 className="foreHeader">The 5-day forecast is: </h2>
                     <div className="foreDay1">For {this.state.date1}: a low temperature of {this.convertToFarenheit(this.state.lowTemp1)} degrees Farenheit and a high temperature of {this.convertToFarenheit(this.state.highTemp1)} with conditions of: {this.state.condition1}</div>
@@ -159,6 +169,7 @@ class Home extends React.Component {
                     <div className="foreDay4">For {this.state.date4}: a low temperature of {this.convertToFarenheit(this.state.lowTemp4)} degrees Farenheit and a high temperature of {this.convertToFarenheit(this.state.highTemp4)} with conditions of: {this.state.condition4}</div>
                     <div className="foreDay5">For {this.state.date5}: a low temperature of {this.convertToFarenheit(this.state.lowTemp5)} degrees Farenheit and a high temperature of {this.convertToFarenheit(this.state.highTemp5)} with conditions of: {this.state.condition5}</div>
                 </div>
+
             </div>
         )
     }

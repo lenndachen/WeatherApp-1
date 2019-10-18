@@ -1,0 +1,43 @@
+.forecast {
+    display: grid;
+    grid-template-areas: 
+      "foreHeader foreHeader foreHeader foreHeader foreHeader"
+      "fore1 fore2 fore3 fore4 fore5";
+    grid-template-columns: 18% 18% 18%;
+    grid-gap: 1.66%;
+    padding: 20px;
+  }
+  
+  .foreHeader {
+    grid-area: foreHeader;
+  }
+  
+  .foreDay1 {
+    grid-area: fore1;
+    border: 1px solid black;
+    padding: 10px;
+  }
+  
+  .foreDay2 {
+    grid-area: fore2;
+    border: 1px solid black;
+    padding: 10px;
+  }
+  
+  .foreDay3 {
+    grid-area: fore3;
+    border: 1px solid black;
+    padding: 10px;
+  }
+  
+  .foreDay4 {
+    grid-area: fore4;
+    border: 1px solid black;
+    padding: 10px;
+  }
+  
+  .foreDay5 {
+    grid-area: fore5;
+    border: 1px solid black;
+    padding: 10px;
+  }

@@ -1,0 +1,20 @@
+.searchAndSaved {
+    padding: 10px;
+    display: grid;
+    grid-template-areas: "search submit . saved";
+    grid-template-columns: 15% 5% 50% 30%;
+  }
+  
+  .search input {
+    grid-area: search;
+  }
+  
+  .search button {
+    grid-area: submit;
+  }
+  
+  .saved {
+    grid-area: saved;
+    text-align: right;
+    padding-right: 10px;
+  }

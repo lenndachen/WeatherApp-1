@@ -1,0 +1,15 @@
+.current {
+    display: grid;
+    grid-template-areas: "map currentInfo";
+    grid-template-columns: 35% 65%;
+    padding: 20px;
+  }
+  
+  .map {
+    grid-area: map;
+  }
+  
+  .currentInfo {
+    grid-area: currentInfo;
+    text-align: left;
+  }

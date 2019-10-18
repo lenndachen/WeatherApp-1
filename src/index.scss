@@ -1,0 +1,87 @@
+@import './assets/styles/reset.scss';
+@import './assets/styles/variables.scss';
+@import './assets/styles/app.scss';
+@import './assets/styles/searchAndSave.scss';
+@import './assets/styles/current.scss';
+@import './assets/styles/forecast.scss';
+
+.searchAndSaved {
+    padding: 10px;
+    display: grid;
+    grid-template-areas: "search submit . saved";
+    grid-template-columns: 15% 5% 50% 30%;
+}
+
+.search input {
+    grid-area: search;
+}
+
+.search button {
+    grid-area: submit;
+}
+
+.saved {
+    grid-area: saved;
+    text-align: right;
+    padding-right: 20px;
+}
+
+.current {
+    display: grid;
+    grid-template-areas: "map currentInfo";
+    grid-template-columns: 35% 65%;
+    padding: 20px;
+}
+
+.map {
+    grid-area: map;
+}
+
+.currentInfo {
+    grid-area: currentInfo;
+    text-align: left;
+}
+
+.forecast {
+    display: grid;
+    grid-template-areas: 
+        "foreHeader foreHeader foreHeader foreHeader foreHeader"
+        "fore1 fore2 fore3 fore4 fore5";
+    grid-template-columns: 18% 18% 18%;
+    grid-gap: 1.66%;
+    padding: 20px;
+}
+  
+.foreHeader {
+    grid-area: foreHeader;
+}
+
+.foreDay1 {
+    grid-area: fore1;
+    border: 1px solid black;
+    padding: 10px;
+}
+
+.foreDay2 {
+    grid-area: fore2;
+    border: 1px solid black;
+    padding: 10px;
+}
+
+.foreDay3 {
+    grid-area: fore3;
+    border: 1px solid black;
+    padding: 10px;
+}
+
+.foreDay4 {
+    grid-area: fore4;
+    border: 1px solid black;
+    padding: 10px;
+}
+
+.foreDay5 {
+    grid-area: fore5;
+    border: 1px solid black;
+    padding: 10px;
+}
