@@ -35,10 +35,10 @@ code {
 .forecast {
   display: grid;
   grid-template-areas: 
-    "foreHeader foreHeader foreHeader"
-    "fore1 fore2 fore3";
-  grid-template-columns: 30% 30% 30%;
-  grid-gap: 2.5%;
+    "foreHeader foreHeader foreHeader foreHeader foreHeader"
+    "fore1 fore2 fore3 fore4 fore5";
+  grid-template-columns: 18% 18% 18%;
+  grid-gap: 1.66%;
   padding: 20px;
 }
 
@@ -60,6 +60,18 @@ code {
 
 .foreDay3 {
   grid-area: fore3;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.foreDay4 {
+  grid-area: fore4;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.foreDay5 {
+  grid-area: fore5;
   border: 1px solid black;
   padding: 10px;
 }
