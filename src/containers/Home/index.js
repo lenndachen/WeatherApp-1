@@ -1,8 +1,8 @@
 import React from "react";
-import cloudy from "../../assets/images/SVG/cloudy.svg";
-import rainy from "../../assets/images/SVG/rainy.svg";
-import sunny from "../../assets/images/SVG/sunny.svg";
-import partCloud from "../../assets/images/SVG/partly cloudy.svg";
+// import cloudy from "../../assets/images/SVG/cloudy.svg";
+// import rainy from "../../assets/images/SVG/rainy.svg";
+// import sunny from "../../assets/images/SVG/sunny.svg";
+// import partCloud from "../../assets/images/SVG/partly cloudy.svg";
 // import SearchAndSave from "../../components/SearchAndSave";
 // import Current from "../../components/Current";
 // import Forecast from "../../components/Forecast";
@@ -12,32 +12,35 @@ class Home extends React.Component {
         super(props);
         this.state = {
             loading: false,
-            userEnteredZip: "",
-            location: "",
-            temp: 255.35,
-            condition: "",
-            icon: "",
-            date1: "",
-            lowTemp1: 255.35,
-            highTemp1: 255.35,
-            condition1: "",
-            date2: "",
-            lowTemp2: 255.35,
-            highTemp2: 255.35,
-            condition2: "",
-            date3: "",
-            lowTemp3: 255.35,
-            highTemp3: 255.35,
-            condition3: "",
-            date4: "",
-            lowTemp4: 255.35,
-            highTemp4: 255.35,
-            condition4: "",
-            date5: "",
-            lowTemp5: 255.35,
-            highTemp5: 255.35,
-            condition5: "",
+            userEnteredZip: 20001,
+            current: {
+                location: "",
+                temp: 0,
+                condition: "",
+                cloud: 0,
+                icon: "",
+                sunrise: 0,
+                sunset: 0,
+            },
+            apiForecast: {},
+            forecastItems: [
+                // {date: "",
+                // month: "01",
+                // day: "01",
+                // year: "2000",
+                // time: "",
+                // formattedDate: "01-01-2000",
+                // temp: 0,
+                // condition: "",
+                // icon: "",},
+            ],
         };
+    }
+
+    componentDidMount() {
+        this.getWeather();
+        this.getForecast();
+        this.getMap();
     }
 
     handleUserEnteredZip = (e) => {
@@ -51,7 +54,6 @@ class Home extends React.Component {
         this.getWeather();
         this.getForecast();
         this.getMap();
-        // this.pickAPic();
     }
 
     getWeather() {
@@ -62,11 +64,66 @@ class Home extends React.Component {
         .then(response => response.json())
         .then(responseData => {
             console.log('My Weather Data', responseData);
-            this.setState({ 
-                location: responseData.name,
-                temp: responseData.main.temp,
-                condition: responseData.weather[0].description,
-            });
+            // let sunrise = new Date(responseData.sys.sunrise).toLocaleString();
+            // let sunriseArray = sunrise.split(" ");
+            // let sunriseFormatted = sunriseArray[1];
+
+            // let sunset = new Date(responseData.sys.sunset).toUTCString();
+            // let sunsetArray = sunset.split(" ");
+            // let sunsetFormatted = sunsetArray[4];
+
+            this.setState({
+                current: {
+                    location: responseData.name,
+                    temp: this.convertToFarenheit(responseData.main.temp),
+                    condition: responseData.weather[0].description,
+                    cloud: responseData.clouds.all,
+                    icon: responseData.weather[0].icon,
+                }
+            })
+
+
+            // if (responseData.clouds.all >= 95) {
+            //     this.setState({
+            //         current: {
+            //             location: responseData.name,
+            //             temp: this.convertToFarenheit(responseData.main.temp),
+            //             condition: responseData.weather[0].description,
+            //             cloud: responseData.clouds.all,
+            //             icon: "rainy"
+            //         }
+            //     });
+            // } else if (responseData.clouds.all >=50 && responseData.clouds.all < 95) {
+            //     this.setState({
+            //         current: {
+            //             location: responseData.name,
+            //             temp: this.convertToFarenheit(responseData.main.temp),
+            //             condition: responseData.weather[0].description,
+            //             cloud: responseData.clouds.all,
+            //             icon: "cloudy"
+            //         }
+            //     });
+            // } else if (responseData.clouds.all >= 10 && responseData.clouds.all <50) {
+            //     this.setState({
+            //         current: {
+            //             location: responseData.name,
+            //             temp: this.convertToFarenheit(responseData.main.temp),
+            //             condition: responseData.weather[0].description,
+            //             cloud: responseData.clouds.all,
+            //             icon: "partCloud"
+            //         }
+            //     });
+            // } else if (responseData.clouds.all <10 && responseData.clouds.all >= 0) {
+            //     this.setState({
+            //         current: {
+            //             location: responseData.name,
+            //             temp: this.convertToFarenheit(responseData.main.temp),
+            //             condition: responseData.weather[0].description,
+            //             cloud: responseData.clouds.all,
+            //             icon: "../../assets/images/SVG/sunny.svg"
+            //         }
+            //     });
+            // }
         });
     }
 
@@ -87,114 +144,68 @@ class Home extends React.Component {
         fetch( apiUrl )
         .then(response => response.json())
         .then(responseData => {
-            console.log('My Forecast Data', responseData);
-
-                let date1 = responseData.list[0].dt_txt;
-                let splitDate1 = date1.split("-");
-                let splitOffTime1 = splitDate1[2].split(" ");
-                let month1 = splitDate1[1];
-                let day1 = splitOffTime1[0];
-                let year1 = splitDate1[0];
-                let newFormat1 = month1+"-"+day1+"-"+year1;
-
-                let date2 = responseData.list[8].dt_txt;
-                let splitDate2 = date2.split("-");
-                let splitOffTime2 = splitDate2[2].split(" ");
-                let month2 = splitDate2[1];
-                let day2 = splitOffTime2[0];
-                let year2 = splitDate2[0];
-                let newFormat2 = month2+"-"+day2+"-"+year2;
-
-                let date3 = responseData.list[16].dt_txt;
-                let splitDate3 = date3.split("-");
-                let splitOffTime3 = splitDate3[2].split(" ");
-                let month3 = splitDate3[1];
-                let day3 = splitOffTime3[0];
-                let year3 = splitDate3[0];
-                let newFormat3 = month3+"-"+day3+"-"+year3;
-
-                let date4 = responseData.list[24].dt_txt;
-                let splitDate4 = date4.split("-");
-                let splitOffTime4 = splitDate4[2].split(" ");
-                let month4 = splitDate4[1];
-                let day4 = splitOffTime4[0];
-                let year4 = splitDate4[0];
-                let newFormat4 = month4+"-"+day4+"-"+year4;
-
-                let date5 = responseData.list[32].dt_txt;
-                let splitDate5 = date5.split("-");
-                let splitOffTime5 = splitDate5[2].split(" ");
-                let month5 = splitDate5[1];
-                let day5 = splitOffTime5[0];
-                let year5 = splitDate5[0];
-                let newFormat5 = month5+"-"+day5+"-"+year5;
-
-            this.setState({ 
-                 date1: newFormat1,
-                 lowTemp1: responseData.list[0].main.temp_min,
-                 highTemp1: responseData.list[0].main.temp_max,
-                 condition1: responseData.list[0].weather[0].description,
-                 date2: newFormat2,
-                 lowTemp2: responseData.list[8].main.temp_min,
-                 highTemp2: responseData.list[8].main.temp_max,
-                 condition2: responseData.list[8].weather[0].description,
-                 date3: newFormat3,
-                 lowTemp3: responseData.list[16].main.temp_min,
-                 highTemp3: responseData.list[16].main.temp_max,
-                 condition3: responseData.list[16].weather[0].description,
-                 date4: newFormat4,
-                 lowTemp4: responseData.list[24].main.temp_min,
-                 highTemp4: responseData.list[24].main.temp_max,
-                 condition4: responseData.list[24].weather[0].description,
-                 date5: newFormat5,
-                 lowTemp5: responseData.list[32].main.temp_min,
-                 highTemp5: responseData.list[32].main.temp_max,
-                 condition5: responseData.list[32].weather[0].description,
-            });
-        });
-        // this.convertDate();
+            this.setState({
+                apiForecast: responseData.list,
+            })
+        for (let i=0; i<responseData.list.length; i++) {
+            let date = responseData.list[i].dt_txt;
+            let splitDate = date.split("-");
+            let splitOffTime = splitDate[2].split(" ");
+            let month = splitDate[1];
+            let time = splitOffTime[1];
+            let day = splitOffTime[0];
+            let year = splitDate[0];
+            let newFormat = month + "-" + day + "-" + year;
+            let temp = responseData.list[i].main.temp;
+            let condition = responseData.list[i].weather[0].description;
+            let icon = responseData.list[i].weather[0].icon;
+            let forecastData = {
+                date: date,
+                month: month,
+                day: day,
+                year: year,
+                time: time,
+                formattedDate: newFormat,
+                temp: this.convertToFarenheit(temp),
+                condition: condition,
+                icon: icon,
+            }
+            this.state.forecastItems.push(forecastData);             
+        }
+        console.log('My Forecast Data', this.state.forecastItems);   
+    })
     }
 
-    convertToFarenheit() {
-        let kelvin = this.state.temp - 273.15;
+    convertToFarenheit = (x) => {
+        let kelvin = x - 273.15;
         let farenheit = kelvin * 9/5 + 32;
         let rounded = Math.round( farenheit * 10 ) / 10
         return rounded;
     }
 
-    // pickAPic = (w) => {
-    //     let imgNeeded = w;
-    //     console.log("pickAPic condition: ", imgNeeded);
-    //     switch(true) {
-    //         case (imgNeeded.includes("rain")):
-    //             this.setState({
-    //                 image: "rainy"
-    //             })
-    //             break;
-    //         case (imgNeeded.includes("sun")):
-    //             this.setState({
-    //                 image: "sunny"
-    //             })
-    //             break;
-    //         case (imgNeeded.includes("clear")):
-    //             this.setState({
-    //                 image: "sunny"
-    //             })
-    //             break;
-    //         case (imgNeeded.includes("cloud")):
-    //             this.setState({
-    //                 image: "cloudy"
-    //             })
-    //             break;
-    //         default:
-    //             this.setState({
-    //                 image: "partCloud"
-    //             })
-    //     }
-    // }
-
     render() {
-        // console.log("this.state.image: ", this.state.image);
+        console.log("current weather data: ", this.state.current);
+        let icon = this.state.current.icon;
+        let image = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
+        // let foreIcon1 = this.state.forecastItems[0].icon;
+        // let foreImg1 = "http://openweathermap.org/img/wn/" + foreIcon1 + "@2x.png";
+        // let foreIcon2 = this.state.forecastItems[].icon;
+        // let foreImg2 = "http://openweathermap.org/img/wn/" + foreIcon2 + "@2x.png";
+        // let foreIcon3 = this.state.forecastItems[].icon;
+        // let foreImg3 = "http://openweathermap.org/img/wn/" + foreIcon3 + "@2x.png";
+        // let foreIcon4 = this.state.forecastItems[].icon;
+        // let foreImg4 = "http://openweathermap.org/img/wn/" + foreIcon4 + "@2x.png";
+        // let foreIcon5 = this.state.forecastItems[].icon;
+        // let foreImg5 = "http://openweathermap.org/img/wn/" + foreIcon5 + "@2x.png";
+        console.log("data pulled from api: ", this.state.apiForecast);
+        let forecastArray = this.state.forecastItems;
+        console.log("forecast array is: ", forecastArray);
+        // let forecastArrayItem = forecastArray[1];
+        console.log("forecast array item is: ", forecastArray[4]);
+        console.log("forecast array item value is: ", forecastArray[1]);
+        // let sample = forecastArray[0].formattedDate;
+        // console.log("testing breakdown of forecastArray: ", sample);
+
         return (
             <div className="homepage">
                 <h1>Weather App</h1>
@@ -226,52 +237,64 @@ class Home extends React.Component {
                     </div>
                     
                     <div className="currentInfo">
-                        <div>Today's weather for {this.state.location}: </div>
-                        <div> It is currently {this.convertToFarenheit(this.state.temp)} {'\u00b0'}F</div>
+                        <div>Today's weather for {this.state.current.location}: </div>
+                        <div> It is currently {this.state.current.temp} {'\u00b0'}F</div>
                         <div> The conditions are:<br/>
                             <img 
                                 className="weatherIcon"
-                                src={sunny} 
+                                src={image}
                                 alt="weather icon">
                             </img><br/>
-                            {/* {this.pickAPic(this.state.condition)} */}
-                            {this.state.condition}
+                            {/* {this.pickAPic(this.state.current.condition)} */}
+                            {this.state.current.condition}
                         </div>
+                        <div> Sunrise is at {this.state.current.sunrise}</div>
+                        <div> Sunset is at {this.state.current.sunset}</div>
                     </div>
                 </div>
 
                 <div className="forecast">
                     <h2 className="foreHeader">The 5-day forecast is: </h2>
-                    <div className="foreDay1">For {this.state.date1}: <br/> 
-                        High: {this.convertToFarenheit(this.state.highTemp1)} {'\u00b0'}F<br/>
-                        Low: {this.convertToFarenheit(this.state.lowTemp1)} {'\u00b0'}F<br/>
+                    <div className="foreDay1">For {}: <br/> 
+                        High: {} {'\u00b0'}F<br/>
+                        Low: {} {'\u00b0'}F<br/>
                         Conditions: <br/>
-                            <img className="weatherIcon" src={sunny} alt="cloudy"></img><br/>
-                            {this.state.condition1}</div>
-                    <div className="foreDay2">For {this.state.date2}: <br/> 
-                        High: {this.convertToFarenheit(this.state.highTemp2)} {'\u00b0'}F<br/>
-                        Low: {this.convertToFarenheit(this.state.lowTemp2)} {'\u00b0'}F<br/>
+                            <img className="weatherIcon" src={""
+                                // foreImg1
+                                } alt="weather icon"></img><br/>
+                            {}</div>
+                    <div className="foreDay2">For {}: <br/> 
+                        High: {} {'\u00b0'}F<br/>
+                        Low: {} {'\u00b0'}F<br/>
                         Conditions: <br/>
-                            <img className="weatherIcon" src={cloudy} alt="cloudy"></img><br/>
-                            {this.state.condition2}</div>
-                    <div className="foreDay3">For {this.state.date3}: <br/> 
-                        High: {this.convertToFarenheit(this.state.highTemp3)} {'\u00b0'}F<br/>
-                        Low: {this.convertToFarenheit(this.state.lowTemp3)} {'\u00b0'}F<br/>
+                            <img className="weatherIcon" src={""
+                                // foreImg2
+                                } alt="weather icon"></img><br/>
+                            {}</div>
+                    <div className="foreDay3">For {}: <br/> 
+                        High: {} {'\u00b0'}F<br/>
+                        Low: {} {'\u00b0'}F<br/>
                         Conditions: <br/>
-                            <img className="weatherIcon" src={partCloud} alt="cloudy"></img><br/>
-                            {this.state.condition3}</div>
-                    <div className="foreDay4">For {this.state.date4}: <br/> 
-                        High: {this.convertToFarenheit(this.state.highTemp4)} {'\u00b0'}F<br/>
-                        Low: {this.convertToFarenheit(this.state.lowTemp4)} {'\u00b0'}F<br/>
+                            <img className="weatherIcon" src={""
+                                // foreImg3
+                                } alt="weather icon"></img><br/>
+                            {}</div>
+                    <div className="foreDay4">For {}: <br/> 
+                        High: {} {'\u00b0'}F<br/>
+                        Low: {} {'\u00b0'}F<br/>
                         Conditions: <br/>
-                            <img className="weatherIcon" src={cloudy} alt="cloudy"></img><br/>
-                            {this.state.condition4}</div>
-                    <div className="foreDay5">For {this.state.date5}: <br/> 
-                        High: {this.convertToFarenheit(this.state.highTemp5)} {'\u00b0'}F<br/>
-                        Low: {this.convertToFarenheit(this.state.lowTemp5)} {'\u00b0'}F<br/>
+                            <img className="weatherIcon" src={""
+                                // foreImg4
+                                } alt="weather icon"></img><br/>
+                            {}</div>
+                    <div className="foreDay5">For {}: <br/> 
+                        High: {} {'\u00b0'}F<br/>
+                        Low: {} {'\u00b0'}F<br/>
                         Conditions: <br/>
-                            <img className="weatherIcon" src={rainy} alt="cloudy"></img><br/>
-                            {this.state.condition5}</div>
+                            <img className="weatherIcon" src={""
+                                // foreImg5
+                            } alt="weather icon"></img><br/>
+                            {}</div>
                 </div>
 
             </div>
