@@ -2,6 +2,7 @@ import React from "react";
 // import SearchAndSave from "../../components/SearchAndSave";
 import Current from "../../components/Current";
 import Forecast from "../../components/Forecast";
+import SavedDisplay from "../../components/SavedDisplay";
 
 class Home extends React.Component {
     constructor(props) {
@@ -32,6 +33,10 @@ class Home extends React.Component {
         };
     }
 
+    componentDidMount() {
+        window.localStorage.setItem('city', JSON.stringify({name: 'Wake Forest', zipCode: '27587'}));
+    }
+
     handleUserEnteredZip = (e) => {
         let userInput = e.target.value;
         this.setState({
@@ -39,10 +44,46 @@ class Home extends React.Component {
         })
     }
 
-    submit = () => {
+    submit = (userZip) => {
+        this.setState({
+            userEnteredZip: userZip,
+        })
         this.getWeather();
-        this.getForecast();
+        this.getForecast(userZip);
         this.getMap();
+    }
+
+    seeSaved = (zip) => {
+        console.log("zip in the see saved fx is: ",zip)
+        const apikey = process.env.REACT_APP_API_WEATHER_KEY;
+        const apiUrl = "http://api.openweathermap.org/data/2.5/weather?zip=" + zip + ",us&APPID=" + apikey;
+        const googleMapKey = process.env.REACT_APP_API_GOOGLE_MAP_KEY
+        let googleApiUrl = "https://maps.googleapis.com/maps/api/staticmap?center=" + zip + "&zoom=11&size=350x350&key=" + googleMapKey;
+        // const forecastApiUrl = "http://api.openweathermap.org/data/2.5/forecast?zip=" + zip + ",us&APPID=" + apikey;
+        fetch( apiUrl )
+        .then(response => response.json())
+        .then(responseData => {
+            console.log('My Weather Data', responseData);
+            // let sunrise = new Date(responseData.sys.sunrise).toLocaleString();
+            // let sunriseArray = sunrise.split(" ");
+            // let sunriseFormatted = sunriseArray[1];
+
+            // let sunset = new Date(responseData.sys.sunset).toUTCString();
+            // let sunsetArray = sunset.split(" ");
+            // let sunsetFormatted = sunsetArray[4];
+
+            this.setState({
+                current: {
+                    location: responseData.name,
+                    temp: this.convertToFarenheit(responseData.main.temp),
+                    condition: responseData.weather[0].description,
+                    cloud: responseData.clouds.all,
+                    icon: responseData.weather[0].icon,
+                },
+                map: googleApiUrl,
+            })
+        })
+        .then(this.getForecast(zip))
     }
 
     getWeather() {
@@ -126,10 +167,10 @@ class Home extends React.Component {
         
     }
 
-    getForecast() {
+    getForecast = (zip) => {
         const apikey = process.env.REACT_APP_API_WEATHER_KEY;
-        let zipCode = this.state.userEnteredZip;
-        const apiUrl = "http://api.openweathermap.org/data/2.5/forecast?zip=" + zipCode + ",us&APPID=" + apikey;
+        let zipCode = zip;
+        const apiUrl = "http://api.openweathermap.org/data/2.5/forecast?zip=" + zipCode+ ",us&APPID=" + apikey;
         fetch( apiUrl )
         .then(response => response.json())
         .then(responseData => {
@@ -147,11 +188,11 @@ class Home extends React.Component {
                 let condition = responseData.list[i].weather[0].description;
                 let icon = responseData.list[i].weather[0].icon;
                
-                this.state.forecastItems.push(newFormat);    
-                this.state.forecastItems.push(temp);    
-                this.state.forecastItems.push(condition);    
-                this.state.forecastItems.push(icon);  
-                this.state.forecastItems.push(time);  
+                this.state.forecastItems.splice(0, 1, newFormat);    
+                this.state.forecastItems.splice(1, 1, temp);    
+                this.state.forecastItems.splice(2, 1, condition);    
+                this.state.forecastItems.splice(3, 1, icon);  
+                this.state.forecastItems.splice(4, 1, time);                  
             }
             
             let response = [];
@@ -177,6 +218,10 @@ class Home extends React.Component {
         let forecastArray = this.state.forecastItems;
         console.log("forecast array is: ", forecastArray);
 
+        let stored = JSON.parse(window.localStorage.getItem('city'));
+        console.log("stored city is: ", stored);
+        console.log("stored zip is: ", stored.zipCode);
+
         return (
             <div className="homepage">
                 <h1>Weather App</h1>
@@ -191,12 +236,17 @@ class Home extends React.Component {
                         </input> 
                         <button 
                             type="submit" 
-                            onClick={() => this.submit()}>
+                            onClick={() => this.submit(this.state.userEnteredZip)}>
                                 Submit
                         </button>
                     </div>
                     <div className="saved">
-                        <p>Local Saved List will go here</p>
+                        <p>Get weather for: </p>
+                        <button
+                            type="submit" 
+                            onClick={() => this.seeSaved(stored.zipCode)}>
+                                {stored.name}
+                        </button>
                     </div>
                 </div>
 
@@ -208,4 +258,4 @@ class Home extends React.Component {
     }
 }
 
-export default Home
+export default Home 
