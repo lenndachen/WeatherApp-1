@@ -1,5 +1,8 @@
 import React from "react";
 
+// window.localStorage.setItem('city', JSON.stringify({name: 'Wake Forest', zipCode: '27587'}));
+
+
 const SavedDisplay = ({ current, map, image }) => (
     <div className="saved">
         <div className="map">

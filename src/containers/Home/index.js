@@ -2,7 +2,7 @@ import React from "react";
 // import SearchAndSave from "../../components/SearchAndSave";
 import Current from "../../components/Current";
 import Forecast from "../../components/Forecast";
-import SavedDisplay from "../../components/SavedDisplay";
+// import SavedDisplay from "../../components/SavedDisplay";
 
 class Home extends React.Component {
     constructor(props) {
@@ -78,9 +78,41 @@ class Home extends React.Component {
                     temp: this.convertToFarenheit(responseData.main.temp),
                     condition: responseData.weather[0].description,
                     cloud: responseData.clouds.all,
-                    icon: responseData.weather[0].icon,
+                    // icon: responseData.weather[0].icon,
                 },
                 map: googleApiUrl,
+            }, () => {
+                // code here will always happen after state is set
+
+
+            if (this.state.current.condition.includes("rain" || "drizzle")) {
+                this.setState({
+                    current: {
+                        icon: "rainy"
+                    }
+                });
+            } 
+            if (this.state.current.condition.includes("clear")) {
+                this.setState({
+                    current: {
+                        icon: "sunny"
+                    }
+                });
+            }
+            if (this.state.current.condition.includes("broken clouds" || "overcast clouds")) {
+                this.setState({
+                    current: {
+                        icon: "cloudy"
+                    }
+                });
+            }
+            if (this.state.current.condition.includes("few clouds" || "scattered clouds")) {
+                this.setState({
+                    current: {
+                        icon: "partCloud"
+                    }
+                });
+            }
             })
         })
         .then(this.getForecast(zip))
@@ -108,52 +140,62 @@ class Home extends React.Component {
                     temp: this.convertToFarenheit(responseData.main.temp),
                     condition: responseData.weather[0].description,
                     cloud: responseData.clouds.all,
-                    icon: responseData.weather[0].icon,
+                    // icon: responseData.weather[0].icon,
                 }
+            }, () => {
+                // code here will always happen after state is set
+
+
+            if (this.state.current.condition.includes("rain")) {
+                this.setState({
+                    current: {
+                        icon: "rainy"
+                    }
+                });
+            } 
+            if (this.state.current.condition.includes("drizzle")) {
+                this.setState({
+                    current: {
+                        icon: "rainy"
+                    }
+                });
+            }
+            if (this.state.current.condition.includes("clear")) {
+                this.setState({
+                    current: {
+                        icon: "sunny"
+                    }
+                });
+            }
+            if (this.state.current.condition.includes("broken clouds")) {
+                this.setState({
+                    current: {
+                        icon: "cloudy"
+                    }
+                });
+            }
+            if (this.state.current.condition.includes("overcast clouds")) {
+                this.setState({
+                    current: {
+                        icon: "cloudy"
+                    }
+                });
+            }
+            if (this.state.current.condition.includes("few clouds")) {
+                this.setState({
+                    current: {
+                        icon: "partCloud"
+                    }
+                });
+            }
+            if (this.state.current.condition.includes("scattered clouds")) {
+                this.setState({
+                    current: {
+                        icon: "partCloud"
+                    }
+                });
+            }
             })
-
-
-            // if (responseData.clouds.all >= 95) {
-            //     this.setState({
-            //         current: {
-            //             location: responseData.name,
-            //             temp: this.convertToFarenheit(responseData.main.temp),
-            //             condition: responseData.weather[0].description,
-            //             cloud: responseData.clouds.all,
-            //             icon: "rainy"
-            //         }
-            //     });
-            // } else if (responseData.clouds.all >=50 && responseData.clouds.all < 95) {
-            //     this.setState({
-            //         current: {
-            //             location: responseData.name,
-            //             temp: this.convertToFarenheit(responseData.main.temp),
-            //             condition: responseData.weather[0].description,
-            //             cloud: responseData.clouds.all,
-            //             icon: "cloudy"
-            //         }
-            //     });
-            // } else if (responseData.clouds.all >= 10 && responseData.clouds.all <50) {
-            //     this.setState({
-            //         current: {
-            //             location: responseData.name,
-            //             temp: this.convertToFarenheit(responseData.main.temp),
-            //             condition: responseData.weather[0].description,
-            //             cloud: responseData.clouds.all,
-            //             icon: "partCloud"
-            //         }
-            //     });
-            // } else if (responseData.clouds.all <10 && responseData.clouds.all >= 0) {
-            //     this.setState({
-            //         current: {
-            //             location: responseData.name,
-            //             temp: this.convertToFarenheit(responseData.main.temp),
-            //             condition: responseData.weather[0].description,
-            //             cloud: responseData.clouds.all,
-            //             icon: "../../assets/images/SVG/sunny.svg"
-            //         }
-            //     });
-            // }
         });
     }
 
@@ -188,6 +230,8 @@ class Home extends React.Component {
                 let condition = responseData.list[i].weather[0].description;
                 let icon = responseData.list[i].weather[0].icon;
                
+                // if (responseData.list[i].dt_txt === responseData.list[i+1].dt_txt)
+
                 this.state.forecastItems.splice(0, 1, newFormat);    
                 this.state.forecastItems.splice(1, 1, temp);    
                 this.state.forecastItems.splice(2, 1, condition);    
@@ -226,7 +270,7 @@ class Home extends React.Component {
             <div className="homepage">
                 <h1>Weather App</h1>
                 {/* <SearchAndSave /> */}
-    
+
                 <div className="searchAndSaved">
                     <div className="search">
                         <input 
@@ -250,7 +294,7 @@ class Home extends React.Component {
                     </div>
                 </div>
 
-                <Current current={this.state.current} map={this.state.map} image={"http://openweathermap.org/img/wn/" + this.state.current.icon + "@2x.png"} />
+                {this.state.current.icon && <Current current={this.state.current} map={this.state.map} condition={this.state.current.icon}/>}
                 <Forecast forecast={this.state.forecastItems} apiData={this.state.apiForecast} />
 
             </div>
