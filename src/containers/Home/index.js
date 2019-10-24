@@ -1,4 +1,5 @@
 import React from "react";
+import moment from "moment";
 // import SearchAndSave from "../../components/SearchAndSave";
 import Current from "../../components/Current";
 import Forecast from "../../components/Forecast";
@@ -18,6 +19,7 @@ class Home extends React.Component {
                 sunrise: 0,
                 sunset: 0,
             },
+            currentIcon: "",
             apiForecast: [],
             forecast: [],
             highLow: [],
@@ -37,7 +39,7 @@ class Home extends React.Component {
 
     submit = (userZip) => {
         let oldInfo = this.state.forecast;
-        console.log("in submit, old info? ", oldInfo);
+        // console.log("in submit, old info? ", oldInfo);
         this.setState({
             userEnteredZip: userZip,
         })
@@ -70,7 +72,6 @@ class Home extends React.Component {
                     temp: this.convertToFarenheit(responseData.main.temp),
                     condition: responseData.weather[0].description,
                     cloud: responseData.clouds.all,
-                    // icon: responseData.weather[0].icon,
                 },
                 map: googleApiUrl,
             }, () => {
@@ -79,30 +80,22 @@ class Home extends React.Component {
 
             if (this.state.current.condition.includes("rain" || "drizzle")) {
                 this.setState({
-                    current: {
-                        icon: "rainy"
-                    }
+                    currentIcon: "rainy"
                 });
             } 
             if (this.state.current.condition.includes("clear")) {
                 this.setState({
-                    current: {
-                        icon: "sunny"
-                    }
+                    currentIcon: "sunny"
                 });
             }
             if (this.state.current.condition.includes("broken clouds" || "overcast clouds")) {
                 this.setState({
-                    current: {
-                        icon: "cloudy"
-                    }
+                    currentIcon: "cloudy"
                 });
             }
             if (this.state.current.condition.includes("few clouds" || "scattered clouds")) {
                 this.setState({
-                    current: {
-                        icon: "partCloud"
-                    }
+                    currentIcon: "partCloud"
                 });
             }
             })
@@ -118,75 +111,66 @@ class Home extends React.Component {
         .then(response => response.json())
         .then(responseData => {
             console.log('My Weather Data', responseData);
-            // let sunrise = new Date(responseData.sys.sunrise).toLocaleString();
-            // let sunriseArray = sunrise.split(" ");
-            // let sunriseFormatted = sunriseArray[1];
+            let apiSunrise = responseData.sys.sunrise;
+            console.log("api says: ", apiSunrise);
+            let sunrise = moment.unix(apiSunrise).format("HH:mm");
+            console.log("sunrise converts to: ", sunrise);
 
-            // let sunset = new Date(responseData.sys.sunset).toUTCString();
-            // let sunsetArray = sunset.split(" ");
-            // let sunsetFormatted = sunsetArray[4];
+            let apiSunset = responseData.sys.sunset;
+            let sunset = moment.unix(apiSunset).format("HH:mm");
+            
+
+            let currentData = [];
+            let location = responseData.name;
+            let temp = this.convertToFarenheit(responseData.main.temp);
+            let condition = responseData.weather[0].description;
+            let cloud = responseData.clouds.all;
+
+            currentData.push(location);
+            currentData.push(temp);
+            currentData.push(condition);
+            currentData.push(cloud);
+            currentData.push(sunrise);
+            currentData.push(sunset);
 
             this.setState({
-                current: {
-                    location: responseData.name,
-                    temp: this.convertToFarenheit(responseData.main.temp),
-                    condition: responseData.weather[0].description,
-                    cloud: responseData.clouds.all,
-                    // icon: responseData.weather[0].icon,
-                }
+                current: currentData,
             }, () => {
-                // code here will always happen after state is set
-
-
-            if (this.state.current.condition.includes("rain")) {
-                this.setState({
-                    current: {
-                        icon: "rainy"
-                    }
-                });
-            } 
-            if (this.state.current.condition.includes("drizzle")) {
-                this.setState({
-                    current: {
-                        icon: "rainy"
-                    }
-                });
-            }
-            if (this.state.current.condition.includes("clear")) {
-                this.setState({
-                    current: {
-                        icon: "sunny"
-                    }
-                });
-            }
-            if (this.state.current.condition.includes("broken clouds")) {
-                this.setState({
-                    current: {
-                        icon: "cloudy"
-                    }
-                });
-            }
-            if (this.state.current.condition.includes("overcast clouds")) {
-                this.setState({
-                    current: {
-                        icon: "cloudy"
-                    }
-                });
-            }
-            if (this.state.current.condition.includes("few clouds")) {
-                this.setState({
-                    current: {
-                        icon: "partCloud"
-                    }
-                });
-            }
-            if (this.state.current.condition.includes("scattered clouds")) {
-                this.setState({
-                    current: {
-                        icon: "partCloud"
-                    }
-                });
-            }
+                if (this.state.current[2].includes("rain")) {
+                    this.setState({
+                        currentIcon: "rainy"
+                    });
+                } 
+                if (this.state.current[2].includes("drizzle")) {
+                    this.setState({
+                        currentIcon: "rainy"
+                    });
+                }
+                if (this.state.current[2].includes("clear")) {
+                    this.setState({
+                        currentIcon: "sunny"
+                    });
+                }
+                if (this.state.current[2].includes("broken clouds")) {
+                    this.setState({
+                        currentIcon: "cloudy"
+                    });
+                }
+                if (this.state.current[2].includes("overcast clouds")) {
+                    this.setState({
+                        currentIcon: "cloudy"
+                    });
+                }
+                if (this.state.current[2].includes("few clouds")) {
+                    this.setState({
+                        currentIcon: "partCloud"
+                    });
+                }
+                if (this.state.current[2].includes("scattered clouds")) {
+                    this.setState({
+                        currentIcon: "partCloud"
+                    });
+                }
             })
         });
     }
@@ -235,13 +219,13 @@ class Home extends React.Component {
             
             let response = [];
             response.push(responseData.list);
-            console.log("array right before set state? ", forecastData);
+            // console.log("array right before set state? ", forecastData);
             this.setState({
                 apiForecast: response,
                 forecast: forecastData,
             }, () => {
                 let forecast = this.state.forecast;
-                console.log("before if statement", forecast[3]);
+                // console.log("before if statement", forecast[3]);
                 if (forecast[3] === "rain") {
                     this.setState({
                         tomorrowIcon: "rainy"
@@ -532,7 +516,7 @@ class Home extends React.Component {
         // console.log("stored city is: ", stored);
         // console.log("stored zip is: ", stored.zipCode);
         // console.log("did the days get stored? ", this.state.tomorrow);
-        console.log("checking home render: ", this.state.forecast);
+        // console.log("checking home render: ", this.state.forecast);
 
         return (
             <div className="homepage">
@@ -562,7 +546,8 @@ class Home extends React.Component {
                     </div>
                 </div>
 
-                {this.state.current.icon && <Current current={this.state.current} map={this.state.map} condition={this.state.current.icon}/>}
+                {this.state.current && <Current current={this.state.current} map={this.state.map} condition={this.state.currentIcon}/>}
+
                 {this.state.tomorrow && <Forecast forecast={this.state.forecast} tomorrow={this.state.tomorrow} next1={this.state.next1} next2={this.state.next2} next3={this.state.next3} next4={this.state.next4} tomorrowIcon={this.state.tomorrowIcon} next1Icon={this.state.next1Icon} next2Icon={this.state.next2Icon} next3Icon={this.state.next3Icon} next4Icon={this.state.next4Icon} apiData={this.state.apiForecast} />}
 
             </div>

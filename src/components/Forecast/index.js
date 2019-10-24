@@ -17,11 +17,7 @@ const Forecast = ({ forecast, tomorrow, next1, next2, next3, next4, tomorrowIcon
     let nextDay3Img;
     let nextDay4Img;
     console.log("array data in forecast comp: ", forecast);
-    console.log("condition for tomorrow in forecast comp: ", forecast[3]);
-    console.log("condition for tomorrow in forecast comp: ", forecast[9]);
-    console.log("condition for tomorrow in forecast comp: ", forecast[15]);
-    console.log("condition for tomorrow in forecast comp: ", forecast[21]);
-    console.log("condition for tomorrow in forecast comp: ", forecast[27]);
+    
     if (tomorrowIcon === "sunny") {
         tomorrowImg = sunny
     }     
@@ -52,7 +48,7 @@ const Forecast = ({ forecast, tomorrow, next1, next2, next3, next4, tomorrowIcon
     if (tomorrowIcon === "wintryMix") {
         tomorrowImg = wintryMix
     }
-    console.log("tomorrow icon at end: ", tomorrowImg)
+
     if (next1Icon === "sunny") {
         nextDay1Img = sunny
     }     
@@ -177,8 +173,8 @@ const Forecast = ({ forecast, tomorrow, next1, next2, next3, next4, tomorrowIcon
         nextDay4Img = wintryMix
     }
     
-    console.log("in forecast, tomorrow is: ", tomorrow);
-    console.log("can i reference something specific? ", tomorrow[0]);
+    // console.log("in forecast, tomorrow is: ", tomorrow);
+    // console.log("can i reference something specific? ", tomorrow[0]);
 
     return(
     <div className="forecast">

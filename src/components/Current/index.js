@@ -11,10 +11,10 @@ import windy from "../../assets/images/SVG/windy.svg"
 import wintryMix from "../../assets/images/SVG/wintry mix.svg"
 
 const Current = ({ current, map, condition }) => {
-    console.log("condition:", condition);
+    // console.log("condition:", condition);
     
     let icon;
-    console.log("current icon at start: ", icon);
+    // console.log("current icon at start: ", icon);
     if (condition === "sunny") {
         icon = sunny
     }     
@@ -45,7 +45,7 @@ const Current = ({ current, map, condition }) => {
     if (condition === "wintryMix") {
         icon = wintryMix
     }
-    console.log("current icon at end: ", icon)
+    // console.log("current icon at end: ", icon)
 
     return(
     <div className="current">
@@ -54,18 +54,18 @@ const Current = ({ current, map, condition }) => {
             </div>
             
             <div className="currentInfo">
-                <div>Today's weather for {current.location}: </div>
-                <div> It is currently {current.temp} {'\u00b0'}F</div>
+                <div>Today's weather for {current[0]}: </div>
+                <div> It is currently {current[1]} {'\u00b0'}F</div>
                 <div> The conditions are:<br/>
                     <img 
                         className="weatherIcon"
                         src={icon}
                         alt="weather icon">
                     </img><br/>
-                    {current.condition}
+                    {current[2]}
                 </div>
-                <div> Sunrise is at {current.sunrise}</div>
-                <div> Sunset is at {current.sunset}</div>
+                <div> Sunrise is at {current[4]}</div>
+                <div> Sunset is at {current[5]}</div>
             </div>
     </div>
 )}
