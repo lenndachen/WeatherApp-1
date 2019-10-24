@@ -14,6 +14,7 @@ const Current = ({ current, map, condition }) => {
     console.log("condition:", condition);
     
     let icon;
+    console.log("current icon at start: ", icon);
     if (condition === "sunny") {
         icon = sunny
     }     
@@ -44,6 +45,7 @@ const Current = ({ current, map, condition }) => {
     if (condition === "wintryMix") {
         icon = wintryMix
     }
+    console.log("current icon at end: ", icon)
 
     return(
     <div className="current">
