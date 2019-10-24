@@ -206,8 +206,8 @@ const Forecast = ({ forecast, tomorrow, next1, next2, next3, next4, tomorrowIcon
                 <img className="weatherIcon" src={nextDay3Img} alt="weather icon"></img><br/>
                 {forecast[21]}</div>
         <div className="foreDay5">For {next4[0]}: <br/> 
-            High: {next4[1]} {'\u00b0'}F<br/>
-            Low: {next4[2]} {'\u00b0'}F<br/>
+            High: {next4[1] === isNaN && "TBD"} {'\u00b0'}F<br/>
+            Low: {next4[2] === isNaN && "TBD"} {'\u00b0'}F<br/>
             Conditions: <br/>
                 <img className="weatherIcon" src={nextDay4Img} alt="weather icon"></img><br/>
                 {forecast[27]}</div>
