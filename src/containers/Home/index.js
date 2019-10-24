@@ -19,17 +19,7 @@ class Home extends React.Component {
                 sunset: 0,
             },
             apiForecast: [],
-            forecastItems: [
-                // {date: "",
-                // month: "01",
-                // day: "01",
-                // year: "2000",
-                // time: "",
-                // formattedDate: "01-01-2000",
-                // temp: 0,
-                // condition: "",
-                // icon: "",},
-            ],
+            forecast: [],
             highLow: [],
         };
     }
@@ -46,7 +36,6 @@ class Home extends React.Component {
     }
 
     submit = (userZip) => {
-        // this.state.forecast.splice(0, 200);
         let oldInfo = this.state.forecast;
         console.log("in submit, old info? ", oldInfo);
         this.setState({
@@ -63,7 +52,6 @@ class Home extends React.Component {
         const apiUrl = "http://api.openweathermap.org/data/2.5/weather?zip=" + zip + ",us&APPID=" + apikey;
         const googleMapKey = process.env.REACT_APP_API_GOOGLE_MAP_KEY
         let googleApiUrl = "https://maps.googleapis.com/maps/api/staticmap?center=" + zip + "&zoom=11&size=350x350&key=" + googleMapKey;
-        // const forecastApiUrl = "http://api.openweathermap.org/data/2.5/forecast?zip=" + zip + ",us&APPID=" + apikey;
         fetch( apiUrl )
         .then(response => response.json())
         .then(responseData => {
@@ -220,7 +208,7 @@ class Home extends React.Component {
         fetch( apiUrl )
         .then(response => response.json())
         .then(responseData => {
-            
+            let forecastData = [];
             for (let i=0; i<responseData.list.length; i++) {
                 let date = responseData.list[i].dt_txt;
                 let splitDate = date.split("-");
@@ -236,203 +224,234 @@ class Home extends React.Component {
                
                 // if (responseData.list[i].dt_txt === responseData.list[i+1].dt_txt)
 
-                this.state.forecastItems.push(day);
-                this.state.forecastItems.push(newFormat);    
-                this.state.forecastItems.push(temp);    
-                this.state.forecastItems.push(condition);    
-                this.state.forecastItems.push(icon);  
-                this.state.forecastItems.push(time);                  
+                forecastData.push(day);
+                forecastData.push(newFormat);    
+                forecastData.push(temp);    
+                forecastData.push(condition);    
+                forecastData.push(icon);  
+                forecastData.push(time);        
+                // console.log("whats in my array after push? ", forecastData);          
             }
             
             let response = [];
             response.push(responseData.list);
+            console.log("array right before set state? ", forecastData);
             this.setState({
                 apiForecast: response,
+                forecast: forecastData,
             }, () => {
-
-                if (this.state.forecastItems[3].includes("rain")) {
+                let forecast = this.state.forecast;
+                console.log("before if statement", forecast[3]);
+                if (forecast[3] === "rain") {
                     this.setState({
                         tomorrowIcon: "rainy"
                     });
                 } 
-                if (this.state.forecastItems[3].includes("drizzle")) {
+                if (forecast[3].includes("drizzle")) {
                     this.setState({
                         tomorrowIcon: "rainy"
                     });
                 }
-                if (this.state.forecastItems[3].includes("clear")) {
+                if (forecast[3].includes("clear")) {
                     this.setState({
                         tomorrowIcon: "sunny"
                     });
                 }
-                if (this.state.forecastItems[3].includes("broken clouds")) {
+                if (forecast[3].includes("broken clouds")) {
                     this.setState({
                         tomorrowIcon: "cloudy"
                     });
                 }
-                if (this.state.forecastItems[3].includes("overcast clouds")) {
+                if (forecast[3].includes("overcast clouds")) {
                     this.setState({
                         tomorrowIcon: "cloudy"
                     });
                 }
-                if (this.state.forecastItems[3].includes("few clouds")) {
+                if (forecast[3].includes("few clouds")) {
                     this.setState({
                         tomorrowIcon: "partCloud"
                     });
                 }
-                if (this.state.forecastItems[3].includes("scattered clouds")) {
+                if (forecast[3].includes("scattered clouds")) {
                     this.setState({
                         tomorrowIcon: "partCloud"
                     });
                 }
 
-                if (this.state.forecastItems[9].includes("rain")) {
+                if (forecast[9].includes("rain")) {
                     this.setState({
                         next1Icon: "rainy"
                     });
                 } 
-                if (this.state.forecastItems[9].includes("drizzle")) {
+                if (forecast[9].includes("drizzle")) {
                     this.setState({
                         next1Icon: "rainy"
                     });
                 }
-                if (this.state.forecastItems[9].includes("clear")) {
+                if (forecast[9].includes("clear")) {
                     this.setState({
                         next1Icon: "sunny"
                     });
                 }
-                if (this.state.forecastItems[9].includes("broken clouds")) {
+                if (forecast[9].includes("broken clouds")) {
                     this.setState({
                         next1Icon: "cloudy"
                     });
                 }
-                if (this.state.forecastItems[9].includes("overcast clouds")) {
+                if (forecast[9].includes("overcast clouds")) {
                     this.setState({
                         next1Icon: "cloudy"
                     });
                 }
-                if (this.state.forecastItems[9].includes("few clouds")) {
+                if (forecast[9].includes("few clouds")) {
                     this.setState({
                         next1Icon: "partCloud"
                     });
                 }
-                if (this.state.forecastItems[9].includes("scattered clouds")) {
+                if (forecast[9].includes("scattered clouds")) {
                     this.setState({
                         next1Icon: "partCloud"
                     });
                 }
 
-                if (this.state.forecastItems[15].includes("rain")) {
+                if (forecast[15].includes("rain")) {
                     this.setState({
                         next2Icon: "rainy"
                     });
                 } 
-                if (this.state.forecastItems[15].includes("drizzle")) {
+                if (forecast[15].includes("drizzle")) {
                     this.setState({
                         next2Icon: "rainy"
                     });
                 }
-                if (this.state.forecastItems[15].includes("clear")) {
+                if (forecast[15].includes("clear")) {
                     this.setState({
                         next2Icon: "sunny"
                     });
                 }
-                if (this.state.forecastItems[15].includes("broken clouds")) {
+                if (forecast[15].includes("broken clouds")) {
                     this.setState({
                         next2Icon: "cloudy"
                     });
                 }
-                if (this.state.forecastItems[15].includes("overcast clouds")) {
+                if (forecast[15].includes("overcast clouds")) {
                     this.setState({
                         next2Icon: "cloudy"
                     });
                 }
-                if (this.state.forecastItems[15].includes("few clouds")) {
+                if (forecast[15].includes("few clouds")) {
                     this.setState({
                         next2Icon: "partCloud"
                     });
                 }
-                if (this.state.forecastItems[15].includes("scattered clouds")) {
+                if (forecast[15].includes("scattered clouds")) {
                     this.setState({
                         next2Icon: "partCloud"
                     });
                 }
 
-                if (this.state.forecastItems[21].includes("rain")) {
+                if (forecast[21].includes("rain")) {
                     this.setState({
                         next3Icon: "rainy"
                     });
                 } 
-                if (this.state.forecastItems[21].includes("drizzle")) {
+                if (forecast[21].includes("drizzle")) {
                     this.setState({
                         next3Icon: "rainy"
                     });
                 }
-                if (this.state.forecastItems[21].includes("clear")) {
+                if (forecast[21].includes("clear")) {
                     this.setState({
                         next3Icon: "sunny"
                     });
                 }
-                if (this.state.forecastItems[21].includes("broken clouds")) {
+                if (forecast[21].includes("broken clouds")) {
                     this.setState({
                         next3Icon: "cloudy"
                     });
                 }
-                if (this.state.forecastItems[21].includes("overcast clouds")) {
+                if (forecast[21].includes("overcast clouds")) {
                     this.setState({
                         next3Icon: "cloudy"
                     });
                 }
-                if (this.state.forecastItems[21].includes("few clouds")) {
+                if (forecast[21].includes("few clouds")) {
                     this.setState({
                         next3Icon: "partCloud"
                     });
                 }
-                if (this.state.forecastItems[21].includes("scattered clouds")) {
+                if (forecast[21].includes("scattered clouds")) {
                     this.setState({
                         next3Icon: "partCloud"
                     });
                 }
 
-                if (this.state.forecastItems[27].includes("rain")) {
+                if (forecast[27].includes("rain")) {
                     this.setState({
                         next4Icon: "rainy"
                     });
                 } 
-                if (this.state.forecastItems[27].includes("drizzle")) {
+                if (forecast[27].includes("drizzle")) {
                     this.setState({
                         next4Icon: "rainy"
                     });
                 }
-                if (this.state.forecastItems[27].includes("clear")) {
+                if (forecast[27].includes("clear")) {
                     this.setState({
                         next4Icon: "sunny"
                     });
                 }
-                if (this.state.forecastItems[27].includes("broken clouds")) {
+                if (forecast[27].includes("broken clouds")) {
                     this.setState({
                         next4Icon: "cloudy"
                     });
                 }
-                if (this.state.forecastItems[27].includes("overcast clouds")) {
+                if (forecast[27].includes("overcast clouds")) {
                     this.setState({
                         next4Icon: "cloudy"
                     });
                 }
-                if (this.state.forecastItems[27].includes("few clouds")) {
+                if (forecast[27].includes("few clouds")) {
                     this.setState({
                         next4Icon: "partCloud"
                     });
                 }
-                if (this.state.forecastItems[27].includes("scattered clouds")) {
+                if (forecast[27].includes("scattered clouds")) {
                     this.setState({
                         next4Icon: "partCloud"
                     });
                 }
 
-            })         
+                let tomorrowArray = this.tomorrowArray(forecast);
+                let temps = this.checkTemps(tomorrowArray);
+                let tomorrow = [tomorrowArray[1], temps[1], temps[0]]
+
+                let next1Array = this.next1Array(forecast);
+                let next1Temps = this.checkTemps(next1Array);
+                let next1 = [next1Array[1], next1Temps[1], next1Temps[0]]
+
+                let next2Array = this.next2Array(forecast);
+                let next2Temps = this.checkTemps(next2Array);
+                let next2 = [next2Array[1], next2Temps[1], next2Temps[0]]
+                
+                let next3Array = this.next3Array(forecast);
+                let next3Temps = this.checkTemps(next3Array);
+                let next3 = [next3Array[1], next3Temps[1], next3Temps[0]]
+                
+                let next4Array = this.next4Array(forecast);
+                let next4Temps = this.checkTemps(next4Array);
+                let next4 = [next4Array[1], next4Temps[1], next4Temps[0]]
+
+                this.setState({
+                    tomorrow: tomorrow,
+                    next1: next1,
+                    next2: next2,
+                    next3: next3,
+                    next4: next4
+                })
+            })                
         
-            console.log('My Forecast Data', this.state.forecastItems);   
+            console.log('My Forecast Data', this.state.forecast);   
         })
     }
 
@@ -506,34 +525,14 @@ class Home extends React.Component {
         let high = Math.max(temps[0], temps[1], temps[2], temps[3], temps[4], temps[5], temps[6], temps[7]);
         let lowHigh = [low, high];
         return lowHigh;
-     }
+    }
 
     render() {
-        let forecastArray = this.state.forecastItems;
-
-        let tomorrowArray = this.tomorrowArray(forecastArray);
-        let temps = this.checkTemps(tomorrowArray);
-        let tomorrow = {date: tomorrowArray[1], high: temps[1], low: temps[0]}
-
-        let next1Array = this.next1Array(forecastArray);
-        let next1Temps = this.checkTemps(next1Array);
-        let next1 = {date: next1Array[1], high: next1Temps[1], low: next1Temps[0]}
-
-        let next2Array = this.next2Array(forecastArray);
-        let next2Temps = this.checkTemps(next2Array);
-        let next2 = {date: next2Array[1], high: next2Temps[1], low: next2Temps[0]}
-        
-        let next3Array = this.next3Array(forecastArray);
-        let next3Temps = this.checkTemps(next3Array);
-        let next3 = {date: next3Array[1], high: next3Temps[1], low: next3Temps[0]}
-        
-        let next4Array = this.next4Array(forecastArray);
-        let next4Temps = this.checkTemps(next4Array);
-        let next4 = {date: next4Array[1], high: next4Temps[1], low: next4Temps[0]}
-
         let stored = JSON.parse(window.localStorage.getItem('city'));
-        console.log("stored city is: ", stored);
-        console.log("stored zip is: ", stored.zipCode);
+        // console.log("stored city is: ", stored);
+        // console.log("stored zip is: ", stored.zipCode);
+        // console.log("did the days get stored? ", this.state.tomorrow);
+        console.log("checking home render: ", this.state.forecast);
 
         return (
             <div className="homepage">
@@ -564,7 +563,7 @@ class Home extends React.Component {
                 </div>
 
                 {this.state.current.icon && <Current current={this.state.current} map={this.state.map} condition={this.state.current.icon}/>}
-                {this.state.tomorrowIcon && <Forecast forecast={this.state.forecastItems} tomorrow={tomorrow} next1={next1} next2={next2} next3={next3} next4={next4} tomorrowIcon={this.state.tomorrowIcon} next1Icon={this.state.next1Icon} next2Icon={this.state.next2Icon} next3Icon={this.state.next3Icon} next4Icon={this.state.next4Icon} apiData={this.state.apiForecast} />}
+                {this.state.tomorrow && <Forecast forecast={this.state.forecast} tomorrow={this.state.tomorrow} next1={this.state.next1} next2={this.state.next2} next3={this.state.next3} next4={this.state.next4} tomorrowIcon={this.state.tomorrowIcon} next1Icon={this.state.next1Icon} next2Icon={this.state.next2Icon} next3Icon={this.state.next3Icon} next4Icon={this.state.next4Icon} apiData={this.state.apiForecast} />}
 
             </div>
         )
