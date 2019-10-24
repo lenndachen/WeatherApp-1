@@ -445,71 +445,50 @@ class Home extends React.Component {
 
     tomorrowArray = (forecastArray) => {
         let today = parseInt(forecastArray[0]);
-        console.log("today's number is: ", today);
         let tomorrowNum = today+1;
         let tomorrow = tomorrowNum.toString();
-        console.log("tomorrow's number is: ", tomorrow);
         let tomorrowIndex = forecastArray.indexOf(tomorrow);
-        console.log("tomorrowIndex is: ", tomorrowIndex);
         let tomorrowArray = forecastArray.slice(tomorrowIndex, tomorrowIndex+48);
-        console.log("tomorrowArray is: ", tomorrowArray);
         return tomorrowArray;
     }
 
     next1Array = (forecastArray) => {
         let today = parseInt(forecastArray[0]);
-        console.log("today's number is: ", today);
         let next1Num = today+2;
         let next1 = next1Num.toString();
-        console.log("next1's number is: ", next1);
         let next1Index = forecastArray.indexOf(next1);
-        console.log("next1Index is: ", next1Index);
         let next1Array = forecastArray.slice(next1Index, next1Index+48);
-        console.log("next1Array is: ", next1Array);
         return next1Array;
     }
 
     next2Array = (forecastArray) => {
         let today = parseInt(forecastArray[0]);
-        console.log("today's number is: ", today);
         let next2Num = today+3;
         let next2 = next2Num.toString();
-        console.log("next2's number is: ", next2);
         let next2Index = forecastArray.indexOf(next2);
-        console.log("next2Index is: ", next2Index);
         let next2Array = forecastArray.slice(next2Index, next2Index+48);
-        console.log("next2Array is: ", next2Array);
         return next2Array;
     }
 
     next3Array = (forecastArray) => {
         let today = parseInt(forecastArray[0]);
-        console.log("today's number is: ", today);
         let next3Num = today+4;
         let next3 = next3Num.toString();
-        console.log("next3's number is: ", next3);
         let next3Index = forecastArray.indexOf(next3);
-        console.log("next3Index is: ", next3Index);
         let next3Array = forecastArray.slice(next3Index, next3Index+48);
-        console.log("next3Array is: ", next3Array);
         return next3Array;
     }
 
     next4Array = (forecastArray) => {
         let today = parseInt(forecastArray[0]);
-        console.log("today's number is: ", today);
         let next4Num = today+5;
         let next4 = next4Num.toString();
-        console.log("next4's number is: ", next4);
         let next4Index = forecastArray.indexOf(next4);
-        console.log("next4Index is: ", next4Index);
         let next4Array = forecastArray.slice(next4Index, next4Index+48);
-        console.log("next4Array is: ", next4Array);
         return next4Array;
     }
 
     checkTemps = (dayArray) => {
-        console.log("in checkTemps fx: ", dayArray);
         let dayData = dayArray;
         function checkNums(num) {
             return num >= -100;
@@ -523,20 +502,14 @@ class Home extends React.Component {
         temps.splice(5,1);
         temps.splice(6,1);
         temps.splice(7,1);
-        console.log("temps are: ", temps);
         let low = Math.min(temps[0], temps[1], temps[2], temps[3], temps[4], temps[5], temps[6], temps[7]);
-        console.log("low is: ", low);
         let high = Math.max(temps[0], temps[1], temps[2], temps[3], temps[4], temps[5], temps[6], temps[7]);
-        console.log("high is: ", high)
         let lowHigh = [low, high];
         return lowHigh;
      }
 
     render() {
-        // console.log("current weather data: ", this.state.current);
-        // console.log("data pulled from api: ", this.state.apiForecast);
         let forecastArray = this.state.forecastItems;
-        // console.log("forecast array is: ", forecastArray);
 
         let tomorrowArray = this.tomorrowArray(forecastArray);
         let temps = this.checkTemps(tomorrowArray);
